@@ -8,7 +8,7 @@ const sauceRoutes = require('./routes/sauce');
 
 app.use(express.json());
 
-mongoose.connect('mongodb+srv://loiccaouen:AfFltdcEmqwXcpgZ@clustersandbox.hkprr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://loiccaouen:<password>@clustersandbox.hkprr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
 { useNewUrlParser: true,
     useUnifiedTopology: true })
     .then(() => console.log('Connexion à MongoDB réussie !'))
