@@ -1,7 +1,7 @@
 const multer = require('multer'); // récupération du module
 
 const MIME_TYPES = { //Dictionnaire MIME pour obtenir une extension
-    'image/jpg': 'jpg',
+    "image/jpg": 'jpg',
     'image/jpeg': 'jpg',
     'image/png': 'png'
 };
