@@ -1,13 +1,12 @@
 const Sauce = require('../models/Sauce');
 const fs = require('fs');
+const { error } = require('console');
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id; 
     const sauce = new Sauce({
         ...sauceObject,
-        usersLiked: [''],
-        usersDisliked: [''],
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
     sauce.save()
@@ -52,6 +51,58 @@ exports.deleteSauce = (req, res, next) => {
       .catch(error => res.status(500).json({ error }));
 };
 
-exports.likeSauce = (req, res, next) => {
+exports.likeOrDislike = (req, res, next) => {
+   const userId = req.body.userId;
+   const like = req.body.like;
+   const sauceId = req.params.id;
+   
+  if (like === 1) {
 
+    Sauce.findOne({ _id: sauceId})
+      .then(sauce => {
+        sauce.likes++;
+        sauce.usersLiked.push(userId);
+        sauce.save();
+        console.log(sauce)
+      })
+
+      .then(() => res.status(200).json({ message: 'J\'aime'}))
+      .catch(error => res.status(400).json({ error }));
+  } else if (like === 0) {
+
+     Sauce.findOne({ _id: sauceId})
+      .then(sauce => {
+        if (sauce.usersLiked.includes(userId)) {
+          const userIdIndex = sauce.usersLiked.indexOf(userId);
+          sauce.usersLiked.splice(userIdIndex, 1);
+          sauce.likes--;
+          sauce.save();
+          console.log(sauce)
+        }
+        else if (sauce.usersDisliked.includes(userId)) {
+          const userIdIndex = sauce.usersDisliked.indexOf(userId);
+          sauce.usersDisliked.splice(userIdIndex, 1);
+          sauce.dislikes--;
+          sauce.save();
+          console.log(sauce)
+        }
+      })
+
+      .then (() => res.status(200).json({ message: 'Neutre' }))
+      .catch (error => res.status(400).json({ error }));
+  } else if (like === -1) {
+
+     Sauce.findOne({ _id: sauceId})
+      .then(sauce => {
+        sauce.dislikes++;
+        sauce.usersDisliked.push(userId);
+        sauce.save();
+        console.log(sauce)
+      })
+
+      .then(() => res.status(200).json({ message: 'Je n\'aime pas'}))
+      .catch(error => res.status(400).json({ error }));
+  } else {
+    res.status(400).json({ error });
+  }
 };

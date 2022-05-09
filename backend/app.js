@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config()
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -8,7 +9,7 @@ const sauceRoutes = require('./routes/sauce');
 
 app.use(express.json());
 
-mongoose.connect('mongodb+srv://loiccaouen:<password>@clustersandbox.hkprr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect(`mongodb+srv://${process.env.USER_MONGODB}:${process.env.PASSWORD_MONGODB}@clustersandbox.hkprr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
 { useNewUrlParser: true,
     useUnifiedTopology: true 
 })
