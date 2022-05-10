@@ -1,4 +1,5 @@
-const dotenv = require('dotenv').config()
+const dotenv = require('dotenv').config();
+const limiter = require('./middleware/express-rate-limit');
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -22,7 +23,8 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
-    
+   
+app.use(limiter);
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/auth', userRoutes);

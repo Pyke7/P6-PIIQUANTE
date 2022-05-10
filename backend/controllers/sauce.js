@@ -63,7 +63,6 @@ exports.likeOrDislike = (req, res, next) => {
         sauce.likes++;
         sauce.usersLiked.push(userId);
         sauce.save();
-        console.log(sauce)
       })
 
       .then(() => res.status(200).json({ message: 'J\'aime'}))
@@ -77,14 +76,12 @@ exports.likeOrDislike = (req, res, next) => {
           sauce.usersLiked.splice(userIdIndex, 1);
           sauce.likes--;
           sauce.save();
-          console.log(sauce)
         }
         else if (sauce.usersDisliked.includes(userId)) {
           const userIdIndex = sauce.usersDisliked.indexOf(userId);
           sauce.usersDisliked.splice(userIdIndex, 1);
           sauce.dislikes--;
           sauce.save();
-          console.log(sauce)
         }
       })
 
@@ -97,7 +94,6 @@ exports.likeOrDislike = (req, res, next) => {
         sauce.dislikes++;
         sauce.usersDisliked.push(userId);
         sauce.save();
-        console.log(sauce)
       })
 
       .then(() => res.status(200).json({ message: 'Je n\'aime pas'}))
