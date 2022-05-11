@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema({
     password: { type: String, required: true }
 });
 
-userSchema.plugin(uniqueValidator);
-userSchema.plugin(mongooseSanitizer);
+userSchema.plugin(uniqueValidator); //oblige un mail unique dans la base de donnée
+userSchema.plugin(mongooseSanitizer); //désinfecte les données entrées par l'utilisteur dans les champs 
 
 module.exports = mongoose.model('User', userSchema);

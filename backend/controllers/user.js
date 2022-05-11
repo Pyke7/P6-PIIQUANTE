@@ -1,9 +1,10 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt'); //package pour crypter le mot de passe
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv').config();
 const User = require('../models/User');
 
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10)
+    bcrypt.hash(req.body.password, 10) //hache 10 fois le mot de passe avant de créer un nouvel utilisateur et l'enregistré dans la DB
         .then(hash => {
             const user = new User({
                 email: req.body.email,
@@ -17,21 +18,21 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
+    User.findOne({ email: req.body.email }) //verifie si l'email existe dans la DB
         .then(user => {
             if (!user) {
                 return res.status(401).json({ error: 'Utilisateur non trouvé !'});
             }
-            bcrypt.compare(req.body.password, user.password)
+            bcrypt.compare(req.body.password, user.password) //compare le hash de la DB avec le hash du mdp de la requête envoyé par le front-end
                 .then(valid => {
                     if (!valid) {
                         return res.status(401).json({ error: 'Mot de passe incorrect !'});
                     }
-                    res.status(200).json({
+                    res.status(200).json({ //renvoie au front-end l'id utilisateur et un token qui encode également l'id utilisateur
                         userId: user._id,
                         token: jwt.sign(
                           { userId: user._id },
-                          'RANDOM_TOKEN_SECRET',
+                          process.env.TOKEN_KEY,
                           { expiresIn: '24h' }
                         )
                     });

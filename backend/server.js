@@ -6,4 +6,4 @@ app.set('port', 3000);
 const server = http.createServer(app);
 console.log('Listening on port ' + port);
 
-server.listen(port);
+server.listen(port); //lancement du serveur node
