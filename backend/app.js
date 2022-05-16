@@ -1,5 +1,4 @@
 const dotenv = require('dotenv').config();
-const limiter = require('./middleware/express-rate-limit');
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -26,7 +25,6 @@ app.use((req, res, next) => {
     next();
 });
    
-app.use(limiter); //limite les requête envoyées à l'API
 app.use('/images', express.static(path.join(__dirname, 'images'))); //rend le dossier /images statique
 
 app.use('/api/auth', userRoutes);
